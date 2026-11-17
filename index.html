@@ -2,53 +2,294 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <title>Anime Burnout Escape 🫪</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Anime Universe 🫪</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
     <style>
-        :root { --main-color: #7289da; --bg: #2c2f33; }
-        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; }
-        nav { width: 100%; display: flex; justify-content: center; gap: 15px; padding: 20px; background: #23272a; }
-        nav button { background: none; border: none; color: white; cursor: pointer; padding: 10px; border-bottom: 2px solid transparent; }
-        nav button:hover { border-bottom: 2px solid var(--main-color); }
-        .page { display: none; width: 80%; max-width: 800px; padding: 40px; }
-        .active { display: block; }
-        .anime-img { width: 200px; height: 200px; background: #555; border-radius: 50%; margin: 20px auto; animation: pulse 2s infinite; }
-        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        :root {
+            --bg: #0d0d0f;
+            --card: #16161a;
+            --accent: #ff6b6b;
+            --accent2: #7c6bff;
+            --text: #e8e8e8;
+            --muted: #888;
+        }
+        body {
+            background: var(--bg);
+            color: var(--text);
+            font-family: 'Segoe UI', system-ui, sans-serif;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        .sidebar {
+            position: fixed;
+            left: 0; top: 0; bottom: 0;
+            width: 260px;
+            background: var(--card);
+            padding: 24px 16px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            border-right: 1px solid #222;
+            overflow-y: auto;
+        }
+        .logo {
+            display: flex; align-items: center; gap: 10px;
+            font-size: 22px; font-weight: 800;
+            padding: 8px 12px; margin-bottom: 16px;
+            color: white;
+        }
+        .logo span { color: var(--accent); }
+        .nav-item {
+            display: flex; align-items: center; gap: 12px;
+            padding: 12px 14px;
+            border-radius: 10px;
+            color: var(--muted);
+            text-decoration: none;
+            font-size: 14px;
+            transition: 0.2s;
+            cursor: pointer;
+        }
+        .nav-item:hover, .nav-item.active {
+            background: rgba(255,255,255,0.06);
+            color: white;
+        }
+        .nav-item.active { color: var(--accent); }
+        .nav-item .icon { font-size: 18px; width: 24px; text-align: center; }
+
+        /* Main */
+        .main {
+            margin-left: 260px;
+            padding: 40px;
+            min-height: 100vh;
+        }
+        .page { display: none; }
+        .page.active { display: block; animation: fadeIn 0.4s; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+        h1 { font-size: 32px; margin-bottom: 8px; }
+        .subtitle { color: var(--muted); margin-bottom: 30px; }
+
+        /* Cards */
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .card {
+            background: var(--card);
+            border-radius: 16px;
+            overflow: hidden;
+            border: 1px solid #222;
+            transition: 0.3s;
+            cursor: pointer;
+        }
+        .card:hover { transform: translateY(-5px); border-color: var(--accent); }
+        .card img { width: 100%; height: 180px; object-fit: cover; }
+        .card-body { padding: 16px; }
+        .card-body h3 { font-size: 16px; margin-bottom: 6px; }
+        .card-body p { color: var(--muted); font-size: 13px; }
+
+        /* Hero */
+        .hero {
+            background: linear-gradient(135deg, #2a1a3a, #1a1a2e);
+            border-radius: 20px;
+            padding: 60px;
+            margin-bottom: 40px;
+            text-align: center;
+            border: 1px solid #333;
+        }
+        .hero h1 { font-size: 42px; background: linear-gradient(90deg, var(--accent), var(--accent2)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .hero p { color: var(--muted); margin-top: 12px; font-size: 16px; }
+
+        /* Anime pics */
+        .anime-pic {
+            width: 100%; height: 250px;
+            border-radius: 16px;
+            object-fit: cover;
+            margin-bottom: 20px;
+            border: 2px solid #333;
+        }
+
+        /* Footer */
+        .footer { margin-top: 60px; padding-top: 20px; border-top: 1px solid #222; color: var(--muted); font-size: 13px; }
+        @media (max-width: 768px) {
+            .sidebar { width: 70px; }
+            .sidebar .label { display: none; }
+            .main { margin-left: 70px; padding: 20px; }
+            .nav-item { justify-content: center; }
+        }
     </style>
 </head>
 <body>
-    <nav>
-        <button onclick="showPage('home')">Главная</button>
-        <button onclick="showPage('tasks')">Чек-лист</button>
-        <button onclick="showPage('anti')">Релакс</button>
-        <button onclick="showPage('about')">О нас</button>
-    </nav>
+    <aside class="sidebar">
+        <div class="logo"><span>🫪</span>Anime<span>U</span></div>
+        <a class="nav-item active" onclick="showPage('home')"><span class="icon">🏠</span><span class="label">Главная</span></a>
+        <a class="nav-item" onclick="showPage('popular')"><span class="icon">🔥</span><span class="label">Популярное</span></a>
+        <a class="nav-item" onclick="showPage('season')"><span class="icon">🌸</span><span class="label">Сезон</span></a>
+        <a class="nav-item" onclick="showPage('top')"><span class="icon">🏆</span><span class="label">Топ</span></a>
+        <a class="nav-item" onclick="showPage('movies')"><span class="icon">🎬</span><span class="label">Фильмы</span></a>
+        <a class="nav-item" onclick="showPage('series')"><span class="icon">📺</span><span class="label">Сериалы</span></a>
+        <a class="nav-item" onclick="showPage('manga')"><span class="icon">📖</span><span class="label">Манга</span></a>
+        <a class="nav-item" onclick="showPage('wallpapers')"><span class="icon">🖼️</span><span class="label">Обои</span></a>
+        <a class="nav-item" onclick="showPage('reviews')"><span class="icon">⭐</span><span class="label">Отзывы</span></a>
+        <a class="nav-item" onclick="showPage('blog')"><span class="icon">📝</span><span class="label">Блог</span></a>
+        <a class="nav-item" onclick="showPage('about')"><span class="icon">ℹ️</span><span class="label">О нас</span></a>
+        <a class="nav-item" onclick="showPage('contact')"><span class="icon">📬</span><span class="label">Контакты</span></a>
+    </aside>
 
-    <div id="home" class="page active animate__animated animate__fadeIn">
-        <div class="anime-img"></div>
-        <h1>Добро пожаловать, выгоревший!</h1>
-        <p>Время отдохнуть, как персонаж из слайс-оф-лайфа.</p>
-    </div>
+    <main class="main">
+        <!-- Home -->
+        <div id="home" class="page active">
+            <div class="hero">
+                <h1>Anime Universe</h1>
+                <p>Твой гид по миру аниме — популярные тайтлы, новинки сезона, обои и многое другое.</p>
+            </div>
+            <img class="anime-pic" src="https://images.unsplash.com/photo-1578632767115-351597cf2472?w=1200" alt="Аниме">
+            <div class="grid">
+                <div class="card" onclick="showPage('popular')"><img src="https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=600" alt=""><div class="card-body"><h3>🔥 Популярное</h3><p>Что смотрят прямо сейчас</p></div></div>
+                <div class="card" onclick="showPage('season')"><img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600" alt=""><div class="card-body"><h3>🌸 Сезон</h3><p>Новинки этого сезона</p></div></div>
+                <div class="card" onclick="showPage('top')"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600" alt=""><div class="card-body"><h3>🏆 Топ</h3><p>Лучшее за всё время</p></div></div>
+            </div>
+            <div class="footer">© 2026 Anime Universe. Сделано с ❤️</div>
+        </div>
 
-    <div id="tasks" class="page animate__animated animate__fadeIn">
-        <h1>Твои дела на сегодня</h1>
-        <ul><li>Закрыть ноутбук навсегда</li><li>Посмотреть аниме</li></ul>
-    </div>
+        <!-- Popular -->
+        <div id="popular" class="page">
+            <h1>🔥 Популярное</h1>
+            <p class="subtitle">Что смотрят прямо сейчас</p>
+            <img class="anime-pic" src="https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=1200" alt="">
+            <div class="grid">
+                <div class="card"><img src="https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=600" alt=""><div class="card-body"><h3>Attack on Titan</h3><p>Атака титанов</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2472?w=600" alt=""><div class="card-body"><h3>Demon Slayer</h3><p>Клинок рассекающий демонов</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600" alt=""><div class="card-body"><h3>Chainsaw Man</h3><p>Человек-бензопила</p></div></div>
+            </div>
+        </div>
 
-    <div id="anti" class="page animate__animated animate__fadeIn">
-        <h1>Зона релакса</h1>
-        <p>Жми на экран, чтобы поймать лепестки сакуры!</p>
-    </div>
+        <!-- Season -->
+        <div id="season" class="page">
+            <h1>🌸 Сезон</h1>
+            <p class="subtitle">Новинки этого сезона</p>
+            <img class="anime-pic" src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1200" alt="">
+            <div class="grid">
+                <div class="card"><img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600" alt=""><div class="card-body"><h3>Blue Lock</h3><p>Голубая тюрьма</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600" alt=""><div class="card-body"><h3>My Hero</h3><p>Моя геройская академия</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2472?w=600" alt=""><div class="card-body"><h3>Bleach</h3><p>Блич: Тысячелетняя война</p></div></div>
+            </div>
+        </div>
 
-    <div id="about" class="page animate__animated animate__fadeIn">
-        <h1>О проекте</h1>
-        <p>Этот сайт — твое безопасное место от дедлайнов.</p>
-    </div>
+        <!-- Top -->
+        <div id="top" class="page">
+            <h1>🏆 Топ</h1>
+            <p class="subtitle">Лучшее за всё время</p>
+            <img class="anime-pic" src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=1200" alt="">
+            <div class="grid">
+                <div class="card"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600" alt=""><div class="card-body"><h3>Fullmetal</h3><p>Стальной алхимик</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2472?w=600" alt=""><div class="card-body"><h3>Steins;Gate</h3><p>Врата Штейна</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=600" alt=""><div class="card-body"><h3>Frieren</h3><p>Фрирен</p></div></div>
+            </div>
+        </div>
+
+        <!-- Movies -->
+        <div id="movies" class="page">
+            <h1>🎬 Фильмы</h1>
+            <p class="subtitle">Полнометражные аниме</p>
+            <img class="anime-pic" src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1200" alt="">
+            <div class="grid">
+                <div class="card"><img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600" alt=""><div class="card-body"><h3>Your Name</h3><p>Твоё имя</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600" alt=""><div class="card-body"><h3>Spirited Away</h3><p>Унесённые призраками</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2472?w=600" alt=""><div class="card-body"><h3>A Silent Voice</h3><p>Форма голоса</p></div></div>
+            </div>
+        </div>
+
+        <!-- Series -->
+        <div id="series" class="page">
+            <h1>📺 Сериалы</h1>
+            <p class="subtitle">Лучшие сериалы</p>
+            <img class="anime-pic" src="https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=1200" alt="">
+            <div class="grid">
+                <div class="card"><img src="https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=600" alt=""><div class="card-body"><h3>Jujutsu Kaisen</h3><p>Магическая битва</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2472?w=600" alt=""><div class="card-body"><h3>One Piece</h3><p>Ван-Пис</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600" alt=""><div class="card-body"><h3>Naruto</h3><p>Наруто</p></div></div>
+            </div>
+        </div>
+
+        <!-- Manga -->
+        <div id="manga" class="page">
+            <h1>📖 Манга</h1>
+            <p class="subtitle">Комиксы Японии</p>
+            <img class="anime-pic" src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=1200" alt="">
+            <div class="grid">
+                <div class="card"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600" alt=""><div class="card-body"><h3>Berserk</h3><p>Берсерк</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2472?w=600" alt=""><div class="card-body"><h3>Vagabond</h3><p>Бродяга</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=600" alt=""><div class="card-body"><h3>Vinland Saga</h3><p>Сага о Винланде</p></div></div>
+            </div>
+        </div>
+
+        <!-- Wallpapers -->
+        <div id="wallpapers" class="page">
+            <h1>🖼️ Обои</h1>
+            <p class="subtitle">Эстетичные обои для телефона</p>
+            <img class="anime-pic" src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=1200" alt="">
+            <div class="grid">
+                <div class="card"><img src="https://images.unsplash.com/photo-1578683010236-d716f9a3f461?w=600" alt=""><div class="card-body"><h3>Закат</h3><p>Городской пейзаж</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1607604276583-eef5d076aa5f?w=600" alt=""><div class="card-body"><h3>Горы</h3><p>Природа</p></div></div>
+                <div class="card"><img src="https://images.unsplash.com/photo-1578632767115-351597cf2472?w=600" alt=""><div class="card-body"><h3>Небо</h3><p>Облака</p></div></div>
+            </div>
+        </div>
+
+        <!-- Reviews -->
+        <div id="reviews" class="page">
+            <h1>⭐ Отзывы</h1>
+            <p class="subtitle">Что говорят зрители</p>
+            <div class="grid">
+                <div class="card"><div class="card-body"><h3>⭐⭐⭐⭐⭐</h3><p>"Лучший сайт про аниме!"</p></div></div>
+                <div class="card"><div class="card-body"><h3>⭐⭐⭐⭐⭐</h3><p>"Красивый дизайн"</p></div></div>
+                <div class="card"><div class="card-body"><h3>⭐⭐⭐⭐</h3><p>"Много контента"</p></div></div>
+            </div>
+        </div>
+
+        <!-- Blog -->
+        <div id="blog" class="page">
+            <h1>📝 Блог</h1>
+            <p class="subtitle">Статьи и новости</p>
+            <div class="grid">
+                <div class="card"><div class="card-body"><h3>Топ-10 аниме 2026</h3><p>Лучшие тайтлы года</p></div></div>
+                <div class="card"><div class="card-body"><h3>Как выбрать аниме</h3><p>Гайд для новичков</p></div></div>
+                <div class="card"><div class="card-body"><h3>История аниме</h3><p>От истоков до сегодня</p></div></div>
+            </div>
+        </div>
+
+        <!-- About -->
+        <div id="about" class="page">
+            <h1>ℹ️ О нас</h1>
+            <p class="subtitle">Мы — команда, влюблённая в аниме</p>
+            <img class="anime-pic" src="https://images.unsplash.com/photo-1613376023733-0a73315d9b06?w=1200" alt="">
+            <p style="color: var(--muted); line-height: 1.7;">Anime Universe — это твой проводник в мир японской анимации. Мы собираем лучшие тайтлы, обои, новости и гайды. Наша цель — помочь каждому найти аниме по душе.</p>
+        </div>
+
+        <!-- Contact -->
+        <div id="contact" class="page">
+            <h1>📬 Контакты</h1>
+            <p class="subtitle">Свяжись с нами</p>
+            <div class="grid">
+                <div class="card"><div class="card-body"><h3>📧 Email</h3><p>hello@animeuniverse.com</p></div></div>
+                <div class="card"><div class="card-body"><h3>📱 Telegram</h3><p>@animeuniverse</p></div></div>
+                <div class="card"><div class="card-body"><h3>💬 Discord</h3><p>discord.gg/anime</p></div></div>
+            </div>
+        </div>
+
+        <div class="footer">© 2026 Anime Universe. Сделано с ❤️</div>
+    </main>
 
     <script>
         function showPage(id) {
             document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
             document.getElementById(id).classList.add('active');
+            document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+            document.querySelector(`[onclick="showPage('${id}')"]`).classList.add('active');
+            window.scrollTo(0, 0);
         }
     </script>
 </body>
