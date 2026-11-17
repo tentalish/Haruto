@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <title>Anime Burnout Escape 🫪</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css"/>
+    <style>
+        :root { --main-color: #7289da; --bg: #2c2f33; }
+        body { margin: 0; background: var(--bg); color: white; font-family: 'Segoe UI', sans-serif; display: flex; flex-direction: column; align-items: center; }
+        nav { width: 100%; display: flex; justify-content: center; gap: 15px; padding: 20px; background: #23272a; }
+        nav button { background: none; border: none; color: white; cursor: pointer; padding: 10px; border-bottom: 2px solid transparent; }
+        nav button:hover { border-bottom: 2px solid var(--main-color); }
+        .page { display: none; width: 80%; max-width: 800px; padding: 40px; }
+        .active { display: block; }
+        .anime-img { width: 200px; height: 200px; background: #555; border-radius: 50%; margin: 20px auto; animation: pulse 2s infinite; }
+        @keyframes pulse { 0% { transform: scale(1); } 50% { transform: scale(1.05); } 100% { transform: scale(1); } }
+    </style>
+</head>
+<body>
+    <nav>
+        <button onclick="showPage('home')">Главная</button>
+        <button onclick="showPage('tasks')">Чек-лист</button>
+        <button onclick="showPage('anti')">Релакс</button>
+        <button onclick="showPage('about')">О нас</button>
+    </nav>
+
+    <div id="home" class="page active animate__animated animate__fadeIn">
+        <div class="anime-img"></div>
+        <h1>Добро пожаловать, выгоревший!</h1>
+        <p>Время отдохнуть, как персонаж из слайс-оф-лайфа.</p>
+    </div>
+
+    <div id="tasks" class="page animate__animated animate__fadeIn">
+        <h1>Твои дела на сегодня</h1>
+        <ul><li>Закрыть ноутбук навсегда</li><li>Посмотреть аниме</li></ul>
+    </div>
+
+    <div id="anti" class="page animate__animated animate__fadeIn">
+        <h1>Зона релакса</h1>
+        <p>Жми на экран, чтобы поймать лепестки сакуры!</p>
+    </div>
+
+    <div id="about" class="page animate__animated animate__fadeIn">
+        <h1>О проекте</h1>
+        <p>Этот сайт — твое безопасное место от дедлайнов.</p>
+    </div>
+
+    <script>
+        function showPage(id) {
+            document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+            document.getElementById(id).classList.add('active');
+        }
+    </script>
+</body>
+</html>
